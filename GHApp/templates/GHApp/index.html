@@ -14,7 +14,7 @@
     <nav class="navbar navbar-default mx-auto">
         <div class="navbar-brand ">Smart Greenhouse System</div>
     </nav>
-    <div class="table-responsive">
+    <div class="table-responsive container-fluid">
         <table class="table">
             <thead>
                 <tr>
@@ -40,45 +40,156 @@
                 </tr>
             </thead>
             <tr>
-                <tr>
-                    <td>Auto Mode</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Auti Mode Status Return</td>
-                    <td>-</td>
-                </tr>
+                <td>Auto Mode</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>Auti Mode Status Return</td>
+                <td>-</td>
             </tr>
 
             <tr>
-                <tr>
-                    <td>Light On</td>
-                    <td>Light Off</td>
-                </tr>
-                <tr>
-                    <td>Light Status Return</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Pump On</td>
-                    <td>Pump Off</td>
-                </tr>
-                <tr>
-                    <td>Pump Status Return</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>Fan On</td>
-                    <td>Fan Off</td>
-                </tr>
-                <tr>
-                    <td>Fan Status Return</td>
-                    <td>-</td>
-                </tr>
+                <td>
+                    <button id="lightOn">Light On</button>
+                </td>
+                <td>
+                    <button id="lightOff">Light Off</button>
+                </td>
             </tr>
-            <th>ThingSpeak Messages and Alarms</th>
+            <tr>
+                <td>Light Status Return</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="pumpOn">Pump On</button>
+                </td>
+                <td>
+                    <button id="pumpOff">Pump Off</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Pump Status Return</td>
+                <td>-</td>
+            </tr>
+            <tr>
+                <td><button id="fanOn"> Fan On</button>
+                </td>
+                <td>
+                    <button id="fanOff">Fan Off</button>
+                </td>
+            </tr>
+            <tr>
+                <td>Fan Status Return</td>
+                <td>-</td>
+            </tr>
+            </tr>
+            <th>Messages and Alarms</th>
+            <tr id="msg ">-</tr>
         </table>
     </div>
+    <script>
+        var light = 0
+        var pump = 0
+        var fan = 0
+
+        document.getElementById("lightOn").addEventListener("click", lightOn);
+        document.getElementById("lightOff").addEventListener("click", lightOff);
+        document.getElementById("pumpOn").addEventListener("click", pumpOn);
+        document.getElementById("pumpOff").addEventListener("click", pumpOff);
+        document.getElementById("fanOn").addEventListener("click", fanOn);
+        document.getElementById("fanOff").addEventListener("click", fanOff);
+
+        function lightOn() {
+            light = 1
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+
+        function lightOff() {
+            light = 0
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+
+        function pumpOn() {
+            pump = 1
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+
+        function pumpOff() {
+            pump = 0
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+
+        function fanOn() {
+            fan = 1
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+
+        function fanOff() {
+            fan = 0
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    if (y == 0) {
+                        document.getElementById("msg ").innerHTML = "error sending command, wait for a few seconds and try again ";
+                    } else {
+                        document.getElementById("msg ").innerHTML = "command sent succefully ";
+                    }
+
+                })
+        }
+    </script>
 </body>
 
 </html>

@@ -14,7 +14,7 @@
     <nav class="navbar navbar-default mx-auto">
         <div class="navbar-brand ">Smart Greenhouse System</div>
     </nav>
-    <div class="table-responsive container-fluid">
+    <div class="table-responsive">
         <table class="table">
             <thead>
                 <tr>
@@ -23,15 +23,15 @@
             </thead>
             <tr>
                 <td>Humidity(%)</td>
-                <td>-</td>
+                <td id="field1">-</td>
                 <td>Temperature(C)</td>
-                <td>-</td>
+                <td id="field2">-</td>
             </tr>
             <tr>
                 <td>Soil Moisture(%)</td>
-                <td>-</td>
+                <td id="field3">-</td>
                 <td>Light(%)</td>
-                <td>-</td>
+                <td id="field4">-</td>
             </tr>
 
             <thead>
@@ -41,11 +41,14 @@
             </thead>
             <tr>
                 <td>Auto Mode</td>
-                <td>-</td>
+                <td><label class="switch">
+                    <input type="checkbox" id="auto">
+                    <span class="slider round"></span>
+                  </label></td>
             </tr>
             <tr>
-                <td>Auti Mode Status Return</td>
-                <td>-</td>
+                <td>Auto Mode Status Return</td>
+                <td id="field8">-</td>
             </tr>
 
             <tr>
@@ -58,7 +61,7 @@
             </tr>
             <tr>
                 <td>Light Status Return</td>
-                <td>-</td>
+                <td id="field5">-</td>
             </tr>
             <tr>
                 <td>
@@ -70,7 +73,7 @@
             </tr>
             <tr>
                 <td>Pump Status Return</td>
-                <td>-</td>
+                <td id="field7">-</td>
             </tr>
             <tr>
                 <td><button id="fanOn"> Fan On</button>
@@ -81,17 +84,19 @@
             </tr>
             <tr>
                 <td>Fan Status Return</td>
-                <td>-</td>
+                <td id="field6">-</td>
             </tr>
             </tr>
             <th>Messages and Alarms</th>
             <tr id="msg ">-</tr>
+            <tr id="msg1 ">-</tr>
         </table>
     </div>
     <script>
-        var light = 0
-        var pump = 0
-        var fan = 0
+        var light
+        var pump
+        var fan
+        var auto
 
         document.getElementById("lightOn").addEventListener("click", lightOn);
         document.getElementById("lightOff").addEventListener("click", lightOff);
@@ -99,10 +104,44 @@
         document.getElementById("pumpOff").addEventListener("click", pumpOff);
         document.getElementById("fanOn").addEventListener("click", fanOn);
         document.getElementById("fanOff").addEventListener("click", fanOff);
+        document.getElementById("auto").addEventListener("click", checkBox);
+
+        document.getElementById("lightOn").addEventListener("click", clock);
+        document.getElementById("lightOff").addEventListener("click", clock);
+        document.getElementById("pumpOn").addEventListener("click", clock);
+        document.getElementById("pumpOff").addEventListener("click", clock);
+        document.getElementById("fanOn").addEventListener("click", clock);
+        document.getElementById("fanOff").addEventListener("click", clock);
+        document.getElementById("auto").addEventListener("click", clock);
+
+
+
+
+
+        var i = 16; //  set your counter to 1
+
+        function clock() { //  create a loop function
+            setTimeout(function() { //  call a 3s setTimeout when the loop is called
+                document.getElementById("msg1 ").innerHTML = "Wait for " + i + " seconnds before sending another command"; //  your code here
+                i = i - 1; //  increment the counter
+                if (i > 0) { //  if the counter < 10, call the loop function
+                    clock(); //  ..  again which will trigger another 
+                } //  ..  setTimeout()
+                else {
+                    document.getElementById("msg ").innerHTML = "-";
+                    document.getElementById("msg1 ").innerHTML = "-";
+                    i = 16
+                }
+            }, 1000);
+
+
+        }
+
+
 
         function lightOn() {
             light = 1
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -117,7 +156,7 @@
 
         function lightOff() {
             light = 0
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -132,7 +171,7 @@
 
         function pumpOn() {
             pump = 1
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -147,7 +186,7 @@
 
         function pumpOff() {
             pump = 0
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -162,7 +201,7 @@
 
         function fanOn() {
             fan = 1
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -177,7 +216,7 @@
 
         function fanOff() {
             fan = 0
-            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump
+            let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
             fetch(file)
                 .then(x => x.text())
                 .then((y) => {
@@ -187,6 +226,82 @@
                         document.getElementById("msg ").innerHTML = "command sent succefully ";
                     }
 
+                })
+        }
+
+
+        function checkBox() {
+            var checkBox = document.getElementById("auto");
+            if (checkBox.checked == true) {
+                auto = 1
+                let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
+                fetch(file)
+                    .then(x => x.text())
+                    .then((y) => {
+                        if (y == 0) {
+                            document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                        } else {
+                            document.getElementById("msg ").innerHTML = "command sent succefully ";
+                        }
+
+                    })
+            } else {
+                auto = 0
+                let file = "https://api.thingspeak.com/update?api_key=2HSQ54WZHU56NFKK&field5=" + light + "&field6=" + fan + "&field7=" + pump + "&field8=" + auto
+                fetch(file)
+                    .then(x => x.text())
+                    .then((y) => {
+                        if (y == 0) {
+                            document.getElementById("msg ").innerHTML = "error sending command, wait for few seconds and try again ";
+                        } else {
+                            document.getElementById("msg ").innerHTML = "command sent succefully ";
+                        }
+
+                    })
+            }
+        }
+
+
+        var myVar = setInterval(apiValues, 1500);
+
+        function apiValues() {
+            let file = " https://api.thingspeak.com/channels/1371932/feeds.json?api_key=ZN4YY5IP4D20TX9D&results=2"
+            fetch(file)
+                .then(x => x.text())
+                .then((y) => {
+                    var arr = y;
+                    var myJSON = JSON.parse(arr);
+                    document.getElementById("field1").innerHTML = myJSON.feeds[1].field1;
+                    document.getElementById("field2").innerHTML = myJSON.feeds[1].field2;
+                    document.getElementById("field3").innerHTML = myJSON.feeds[1].field3;
+                    document.getElementById("field4").innerHTML = myJSON.feeds[1].field4;
+
+
+                    if (myJSON.feeds[1].field5 == 1) {
+                        document.getElementById("field5").innerHTML = "ON";
+                    } else {
+                        document.getElementById("field5").innerHTML = "OFF";
+                    }
+                    if (myJSON.feeds[1].field6 == 1) {
+                        document.getElementById("field6").innerHTML = "ON";
+                    } else {
+                        document.getElementById("field6").innerHTML = "OFF";
+                    }
+                    if (myJSON.feeds[1].field7 == 1) {
+                        document.getElementById("field7").innerHTML = "ON";
+                    } else {
+                        document.getElementById("field7").innerHTML = "OFF";
+                    }
+                    if (myJSON.feeds[1].field8 == 1) {
+                        document.getElementById("auto").checked = true;
+                    } else {
+                        document.getElementById("auto").checked = false;
+                    }
+                    if (myJSON.feeds[1].field8 == 1) {
+                        document.getElementById("field8").innerHTML = "ON";
+                    } else {
+                        document.getElementById("field8").innerHTML = "OFF";
+                    }
                 })
         }
     </script>
